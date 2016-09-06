@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "Sqitch" && exit 0
