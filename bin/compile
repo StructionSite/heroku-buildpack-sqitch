@@ -36,7 +36,7 @@ if [ -d $BUILD_DIR/local ]; then
 fi
 
 echo "-----> Adding sqitch database target"
-sqitch target add heroku_db $DATABASE_URL
+sqitch target add heroku_db "$DATABASE_URL"
 
 echo "-----> Making this target the default"
 sqitch config core.pg.target heroku_db
