@@ -34,3 +34,16 @@ if [ -d $BUILD_DIR/local ]; then
   mkdir -p $CACHE_DIR
   cp -a $BUILD_DIR/local $CACHE_DIR/local
 fi
+
+echo "-----> Adding sqitch database target"
+sqitch target add heroku_db $DATABASE_URL
+
+echo "-----> Making this target the default"
+sqitch config core.pg.target heroku_db
+
+echo "-----> Persisting settings"
+PROFILE_PATH="$BUILD_DIR/.profile.d/sqitch.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+
+echo "export PERL5LIB=/app/local/lib/perl5" >> $PROFILE_PATH
+echo "export PATH=\$HOME/local/bin:\$PATH" >> $PROFILE_PATH
