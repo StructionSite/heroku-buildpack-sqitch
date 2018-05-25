@@ -1,3 +1,9 @@
 #!/bin/bash
 
-echo "Sqitch" && test -f sqitch.conf
+# this pack is valid for apps with a sqitch.conf in the root
+if [ -f $1/sqitch.conf ]; then
+  echo "Sqitch"
+  exit 0
+else
+  exit 1
+fi
