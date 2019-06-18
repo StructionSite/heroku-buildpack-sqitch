@@ -14,19 +14,14 @@ ENV_DIR="$3"
 #   vars into the environment with this function
 export_env_dir() {
   env_dir=$1
-  whitelist_regex=${2:-'DATABASE_URL'}
-  blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
-  if [ -d "$env_dir" ]; then
-    for e in $(ls $env_dir); do
-      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
-      export "$e=$(cat $env_dir/$e)"
-      :
-    done
+  env_var=$2
+  if [ -f "$env_dir/$env_var" ]; then
+      export "$env_var=$(cat $env_dir/$env_var)"
   fi
 }
 
-# Run it
-export_env_dir $ENV_DIR
+export_env_dir $ENV_DIR DATABASE_URL
+export_env_dir $ENV_DIR SQITCH_ROOT
 
 PATH="$BUILD_DIR/local/bin:$PATH"
 
@@ -52,6 +47,10 @@ if [ -d $BUILD_DIR/local ]; then
   rm -rf $CACHE_DIR/local
   mkdir -p $CACHE_DIR
   cp -a $BUILD_DIR/local $CACHE_DIR/local
+fi
+
+if [ -d $SQITCH_ROOT ]; then
+  cd $SQITCH_ROOT
 fi
 
 echo "-----> Adding sqitch database target"
