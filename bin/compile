@@ -59,6 +59,9 @@ sqitch target add heroku_db "$DATABASE_URL"
 echo "-----> Making this target the default"
 sqitch config core.pg.target heroku_db
 
+echo "-----> Running Database Migrations"
+sqitch deploy heroku_db
+
 echo "-----> Persisting settings"
 PROFILE_PATH="$BUILD_DIR/.profile.d/sqitch.sh"
 mkdir -p $(dirname $PROFILE_PATH)
